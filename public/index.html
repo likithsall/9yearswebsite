@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edwisely · Happy 9 Years</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=Alata&family=Belleza&family=Caveat:wght@400..700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <h1 class="anniversary-title">Happy 9 Years of</h1>
+    <img src="assets/logo.jpg" alt="Edwisely Logo" class="company-logo">
+  </header>
+
+  <section class="photo-carousel-container">
+    <div class="photo-track" id="photoTrack">
+      <!-- 📸 SET 1: Your 23 Photos -->
+      <img src="assets/photo1.jpg" alt="Edwisely Memory">
+      <img src="assets/photo2.jpg" alt="Edwisely Memory">
+      <img src="assets/photo3.jpg" alt="Edwisely Memory">
+      <img src="assets/photo4.jpg" alt="Edwisely Memory">
+      <img src="assets/photo5.jpg" alt="Edwisely Memory">
+      <img src="assets/photo6.jpg" alt="Edwisely Memory">
+      <img src="assets/photo7.jpg" alt="Edwisely Memory">
+      <img src="assets/photo8.jpg" alt="Edwisely Memory">
+      <img src="assets/photo9.jpg" alt="Edwisely Memory">
+      <img src="assets/photo10.jpg" alt="Edwisely Memory">
+      <img src="assets/photo11.jpg" alt="Edwisely Memory">
+      <img src="assets/photo12.jpg" alt="Edwisely Memory">
+      <img src="assets/photo13.jpg" alt="Edwisely Memory">
+      <img src="assets/photo14.jpg" alt="Edwisely Memory">
+      <img src="assets/photo15.jpg" alt="Edwisely Memory">
+      <img src="assets/photo16.jpg" alt="Edwisely Memory">
+      <img src="assets/photo17.jpg" alt="Edwisely Memory">
+      <img src="assets/photo18.jpg" alt="Edwisely Memory">
+      <img src="assets/photo19.jpg" alt="Edwisely Memory">
+      <img src="assets/photo20.jpg" alt="Edwisely Memory">
+      <img src="assets/photo21.jpg" alt="Edwisely Memory">
+      <img src="assets/photo22.jpg" alt="Edwisely Memory">
+      <img src="assets/photo23.jpg" alt="Edwisely Memory">
+
+      <!-- 🔄 SET 2: The Seamless Loop Buffer (Exact same 23 photos) -->
+      <img src="assets/photo1.jpg" alt="Edwisely Memory">
+      <img src="assets/photo2.jpg" alt="Edwisely Memory">
+      <img src="assets/photo3.jpg" alt="Edwisely Memory">
+      <img src="assets/photo4.jpg" alt="Edwisely Memory">
+      <img src="assets/photo5.jpg" alt="Edwisely Memory">
+      <img src="assets/photo6.jpg" alt="Edwisely Memory">
+      <img src="assets/photo7.jpg" alt="Edwisely Memory">
+      <img src="assets/photo8.jpg" alt="Edwisely Memory">
+      <img src="assets/photo9.jpg" alt="Edwisely Memory">
+      <img src="assets/photo10.jpg" alt="Edwisely Memory">
+      <img src="assets/photo11.jpg" alt="Edwisely Memory">
+      <img src="assets/photo12.jpg" alt="Edwisely Memory">
+      <img src="assets/photo13.jpg" alt="Edwisely Memory">
+      <img src="assets/photo14.jpg" alt="Edwisely Memory">
+      <img src="assets/photo15.jpg" alt="Edwisely Memory">
+      <img src="assets/photo16.jpg" alt="Edwisely Memory">
+      <img src="assets/photo17.jpg" alt="Edwisely Memory">
+      <img src="assets/photo18.jpg" alt="Edwisely Memory">
+      <img src="assets/photo19.jpg" alt="Edwisely Memory">
+      <img src="assets/photo20.jpg" alt="Edwisely Memory">
+      <img src="assets/photo21.jpg" alt="Edwisely Memory">
+      <img src="assets/photo22.jpg" alt="Edwisely Memory">
+      <img src="assets/photo23.jpg" alt="Edwisely Memory">
+    </div>
+  </section>
+
+  <main class="cards-wall-container">
+    <div class="search-wrapper">
+      <input type="text" id="searchBar" placeholder="🔍 Search cards by name (To or From)...">
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+      <div class="loading-state">Assembling the memory wall...</div>
+    </div>
+  </main>
+
+  <div class="action-footer">
+    <button class="btn-trigger-modal" id="openModalBtn">✍️ Write a New Greeting Card</button>
+  </div>
+
+  <div class="modal-overlay" id="formModal" data-mode="write">
+    <div class="card-composer-stage">
+      <div class="spread open" id="cardSpread">
+        <div class="spine"></div>
+
+        <div class="page right">
+          <div class="page-inset">
+            <form id="greetingForm" style="display: flex; flex-direction: column; height: 100%;">
+              <div class="tf-row tf-top">
+                <span class="tf-label">To</span>
+                <input type="text" id="recipientName" class="tf-val hand field-input" autocomplete="off" required>
+              </div>
+
+              <textarea id="message" class="field message hand field-input" placeholder="Write your thanks here…" required></textarea>
+
+              <div class="tf-row tf-bottom">
+                <span class="tf-label">From</span>
+                <input type="text" id="senderName" class="tf-val hand field-input" autocomplete="off" required>
+              </div>
+
+              <div class="modal-actions-custom write-only">
+                <button type="button" class="btn ghost" id="closeModalBtn">Cancel</button>
+                <button type="submit" class="btn" id="submitBtn">Publish Greeting</button>
+              </div>
+
+              <div class="modal-actions-custom view-only">
+                <button type="button" class="btn" id="viewCloseModalBtn">Close Card</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="cover">
+          <div class="face back">
+            <div class="back-content">
+              <div class="back-mark">9</div>
+              <div class="back-sub">YEARS&nbsp;TOGETHER</div>
+              <div class="back-rule"></div>
+              <p class="back-note">Write a few honest words, and pin this to the board.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

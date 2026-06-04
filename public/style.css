@@ -1,0 +1,232 @@
+:root {
+  --cover: #180dad;
+  --deep: #100a86;
+  --coverText: #ffffff;
+  --paper: #ffffff;
+  --ink: #1c1c28;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(120% 90% at 50% 0%, #e8e9f7 0%, #d8daf0 55%, #c8cbe9 100%);
+  color: #1c1c28;
+  min-height: 100vh;
+  padding-bottom: 120px;
+  overflow-x: hidden;
+}
+
+/* Header Layout */
+.app-header { 
+  display: flex; 
+  flex-direction: row; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 20px 20px 10px 20px; 
+  gap: 14px; 
+}
+
+/* Hyper-Modern Bold Typography Layout */
+.anniversary-title { 
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2.8rem; 
+  font-weight: 900; 
+  color: var(--cover); 
+  letter-spacing: -0.04em; 
+  line-height: 1;
+}
+
+.company-logo { 
+  height: 48px; 
+  width: auto;
+  object-fit: contain;
+  margin: 0;
+}
+
+/* 1. Add overflow: hidden so the giant track doesn't break your page width */
+.photo-carousel-container { 
+  padding: 20px 0; 
+  background: rgba(255, 255, 255, 0.4); 
+  margin-bottom: 30px; 
+  border-top: 1px solid rgba(24,13,173,0.1); 
+  border-bottom: 1px solid rgba(24,13,173,0.1); 
+  overflow: hidden; 
+  width: 100%;
+}
+
+/* 2. Force the track to be as wide as all 46 photos combined */
+.photo-track { 
+  display: flex; 
+  flex-wrap: nowrap;
+  width: max-content; 
+  animation: continuousLoop 75s linear infinite; 
+}
+
+/* 3. Let the photos keep their natural width (auto) so they stay clear */
+.photo-track img { 
+  height: 180px; 
+  width: auto; 
+  border-radius: 12px; 
+  margin: 0 15px; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+  flex-shrink: 0; /* Prevents the browser from trying to squish the images */
+}
+
+/* 4. The seamless loop animation */
+@keyframes continuousLoop { 
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } 
+}
+
+/* Search Customization */
+.search-wrapper { max-width: 500px; margin: 0 auto 40px auto; }
+#searchBar { width: 100%; padding: 14px 24px; font-size: 1rem; font-family: "Alata", sans-serif; border: 2px solid #d8daf0; border-radius: 50px; outline: none; transition: 0.3s; }
+#searchBar:focus { border-color: var(--cover); box-shadow: 0 8px 25px rgba(24, 13, 173, 0.15); }
+
+/* Wall Grid Component */
+.cards-wall-container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+
+/* FRAMER MOTION EMULATION: Staggered Fade + Spring scale on mount */
+@keyframes framerMotionEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Artistic, Organic Board Note Cards */
+.grid-paper-card {
+  position: relative; 
+  border-radius: 2px 6px 6px 2px;
+  box-shadow: 0 5px 18px rgba(24,13,120,.04), inset 0 0 0 1px rgba(24,13,120,.03);
+  padding: 24px 20px 18px 20px; 
+  display: flex;
+  flex-direction: column;
+  min-height: 190px;
+  max-height: 240px;
+  cursor: pointer;
+  opacity: 0; 
+  animation: framerMotionEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.grid-paper-card:nth-child(even) { transform: rotate(-1.2deg); }
+.grid-paper-card:nth-child(3n) { transform: rotate(1deg); }
+.grid-paper-card:nth-child(5n) { transform: rotate(-0.6deg); }
+
+.grid-paper-card:nth-child(4n+1) { background: #ffffff; }
+.grid-paper-card:nth-child(4n+2) { background: #fdfbfa; } 
+.grid-paper-card:nth-child(4n+3) { background: #f8f9fe; } 
+.grid-paper-card:nth-child(4n+4) { background: #faf9f5; } 
+
+.grid-paper-card::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 55px;
+  height: 14px;
+  background: rgba(24, 13, 173, 0.08);
+  backdrop-filter: blur(1px);
+  border-radius: 1px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.01);
+  z-index: 2;
+}
+
+.grid-paper-card:hover { 
+  transform: translateY(-8px) scale(1.04) rotate(0deg) !important; 
+  box-shadow: 0 16px 35px rgba(24,13,120,.14), inset 0 0 0 1px rgba(24,13,120,.06); 
+  z-index: 10; 
+}
+
+/* Dynamic Text Fields Inside Main Grid Board */
+.grid-paper-card .tf-row { gap: 8px; }
+.grid-paper-card .tf-label { width: 32px; font-size: 9.5px; }
+.grid-paper-card .tf-val.hand { font-size: 20px; min-height: 20px; }
+.grid-paper-card .message.hand { 
+  font-size: 18px; 
+  line-height: 1.35; 
+  margin-top: 10px; 
+  margin-bottom: 10px; 
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+/* Perfect Modal Centering Framework */
+.action-footer { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 100; }
+.btn-trigger-modal { background: var(--cover); color: #fff; border: none; padding: 16px 36px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 25px rgba(24, 13, 173, 0.3); font-family: "Alata", sans-serif; font-weight: bold; transition: transform 0.2s ease; }
+.btn-trigger-modal:hover { transform: scale(1.04); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(28,28,40,0.65); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1000; }
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+.card-composer-stage {
+  perspective: 2500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  transform: scale(0.82);
+  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 🌟 UPDATED: Dynamic viewport scalar matching the new 1020px footprint */
+.modal-overlay.active .card-composer-stage {
+  transform: scale(min(1, calc(100vw / 1100)));
+}
+
+/* 🌟 UPDATED: Enlarged Book Spread Layout Dimensions */
+.spread { 
+  position: relative; 
+  width: 1020px;   /* Expanded overall footprint */
+  height: 680px;  /* Taller height profile */
+  transform-style: preserve-3d; 
+  transform: translateX(0);
+}
+
+.spine { position: absolute; top: 0; bottom: 0; left: 50%; width: 36px; transform: translateX(-50%); background: linear-gradient(90deg, transparent 0%, rgba(20,15,80,.12) 48%, rgba(20,15,80,.12) 52%, transparent 100%); z-index: 1; }
+
+/* 🌟 UPDATED: Pages updated to scale to 510px width */
+.page { position: absolute; top: 0; width: 510px; height: 680px; background: var(--paper); border-radius: 4px 10px 10px 4px; }
+.page.right { right: 0; box-shadow: 0 26px 60px -28px rgba(24,13,120,.42), inset 0 0 0 1px rgba(24,13,120,.06); }
+.page-inset { position: absolute; inset: 40px 45px 35px 40px; display: flex; flex-direction: column; }
+
+/* 🌟 UPDATED: Cover dimensions matched to 510px width */
+.cover { position: absolute; top: 0; right: 0; width: 510px; height: 680px; transform-style: preserve-3d; transform-origin: left center; transform: rotateY(-180deg); z-index: 5; }
+.face { position: absolute; inset: 0; border-radius: 4px 10px 10px 4px; backface-visibility: hidden; }
+.face.back { transform: rotateY(180deg); background: var(--paper); box-shadow: inset 0 0 0 1px rgba(24,13,120,.06); border-radius: 10px 4px 4px 10px; }
+.back-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 50px 46px; color: var(--ink); }
+.back-mark { font-family: "Dancing Script", cursive; font-weight: 700; font-size: 110px; color: var(--cover); line-height: 1; }
+.back-sub { font-family: "Alata", sans-serif; font-size: 13px; letter-spacing: .36em; color: var(--cover); opacity: .8; margin-top: 4px; }
+.back-rule { width: 55px; height: 2px; background: var(--cover); opacity: .5; margin: 26px 0 22px; }
+.back-note { font-family: "Belleza", sans-serif; font-size: 21px; line-height: 1.5; color: rgba(28,28,40,.66); }
+
+/* Form Components */
+.tf-label { font-family: "Alata", sans-serif; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--cover); width: 46px; flex: none; }
+.tf-val { flex: 1; min-height: 24px; border-bottom: 1px solid rgba(24,13,173,0.2); padding-bottom: 3px; }
+
+.hand { font-family: "Caveat", cursive; color: var(--ink); }
+.tf-val.hand { font-size: 28px; line-height: 1; }
+.message.hand { font-size: 29px; line-height: 1.5; flex: 1; margin-top: 6px; }
+
+.field-input { background: transparent; border: none; outline: none; resize: none; }
+.field-input::placeholder { color: rgba(28,28,40,.3); font-family: "Caveat", cursive; }
+
+.modal-actions-custom { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+.btn { font-family: "Alata", sans-serif; font-size: 14px; letter-spacing: .03em; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--cover); background: var(--cover); color: #fff; cursor: pointer; transition: transform .15s; }
+.btn:hover { transform: translateY(-1px); }
+.btn.ghost { background: transparent; color: var(--cover); border-color: rgba(24,13,173,0.35); }
+
+[data-mode="write"] .view-only { display: none !important; }
+[data-mode="view"] .write-only { display: none !important; }

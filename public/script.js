@@ -269,19 +269,12 @@ function escapeHTML(str) {
   return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
 }
 
-// Position carousel directly below header, then anchor cards wall below both
+// Anchor the scrollable wall just below the fixed header
 function updateContentOffset() {
-  const header   = document.querySelector('.app-header');
-  const carousel = document.querySelector('.photo-carousel-container');
-  const wall     = document.querySelector('.cards-wall-container');
-  if (!header || !carousel || !wall) return;
-
-  const headerH = header.offsetHeight;
-  carousel.style.top = headerH + 'px';
-
-  // Read carousel height after repositioning
-  const carouselH = carousel.offsetHeight;
-  wall.style.top = (headerH + carouselH) + 'px';
+  const header = document.querySelector('.app-header');
+  const wall   = document.querySelector('.cards-wall-container');
+  if (!header || !wall) return;
+  wall.style.top = header.offsetHeight + 'px';
 }
 
 // App bootstrapping sequence

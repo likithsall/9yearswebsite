@@ -53,17 +53,12 @@ body {
 /* 1. Add overflow: hidden so the giant track doesn't break your page width */
 .photo-carousel-container {
   padding: 20px 0;
-  background: rgba(216, 218, 240, 0.97);
+  background: rgba(216, 218, 240, 0.6);
   border-top: 1px solid rgba(24,13,173,0.1);
   border-bottom: 1px solid rgba(24,13,173,0.1);
   overflow: hidden;
   width: 100%;
-  position: fixed;
-  top: 78px;
-  left: 0;
-  right: 0;
-  z-index: 40;
-  backdrop-filter: blur(6px);
+  margin-bottom: 8px;
 }
 
 /* 2. Force the track to be as wide as all 46 photos combined */
@@ -96,37 +91,39 @@ body {
 #searchBar { width: 100%; padding: 14px 24px; font-size: 1rem; font-family: "Alata", sans-serif; border: 2px solid #d8daf0; border-radius: 50px; outline: none; transition: 0.3s; }
 #searchBar:focus { border-color: var(--cover); box-shadow: 0 8px 25px rgba(24, 13, 173, 0.15); }
 
-/* Wall Grid Component — fixed panel, top set by JS, fills to bottom */
+/* Wall Grid Component — fixed panel from header to bottom, scrolls internally */
 .cards-wall-container {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
   /* top is set dynamically by JS */
-  display: flex;
-  flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background: radial-gradient(120% 90% at 50% 0%, #e8e9f7 0%, #d8daf0 55%, #c8cbe9 100%);
   z-index: 10;
 }
 
-/* Search bar pinned at top of panel — never scrolls */
+/* Search bar sticks once carousel scrolls away */
 .search-wrapper {
-  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: radial-gradient(120% 90% at 50% 0%, #e8e9f7 0%, #d8daf0 55%, #c8cbe9 100%);
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 16px 24px 12px;
+  max-width: 100%;
+  padding: 12px 24px 10px;
+  margin: 0;
 }
 
-/* Only the grid scrolls */
+#searchBar { max-width: 500px; display: block; margin: 0 auto; }
+
+/* Cards grid — normal flow inside the scroll container */
 .cards-grid {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 25px;
-  padding: 0 24px 120px;
+  padding: 16px 24px 120px;
 }
 
 /* ── Skeleton loader cards ── */

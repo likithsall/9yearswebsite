@@ -81,7 +81,7 @@
   </main>
 
   <div class="action-footer">
-    <button class="btn-trigger-modal" id="openModalBtn">✍️ Write a New Greeting Card</button>
+    <button class="btn-trigger-modal" id="openModalBtn">💌 Write a New Greeting Card</button>
   </div>
 
   <div class="modal-overlay" id="formModal" data-mode="write">
@@ -92,6 +92,13 @@
         <div class="page right">
           <div class="page-inset">
             <form id="greetingForm" style="display: flex; flex-direction: column; height: 100%;">
+              <div class="mobile-card-header">
+                <div class="back-mark">9</div>
+                <div class="back-sub">YEARS&nbsp;TOGETHER</div>
+                <div class="back-rule"></div>
+                <p class="back-note">Write a few honest words, and pin this to the board.</p>
+              </div>
+
               <div class="tf-row tf-top" style="position: relative;">
                 <span class="tf-label">To</span>
                 <input type="text" id="recipientName" class="tf-val hand field-input" autocomplete="off" required>

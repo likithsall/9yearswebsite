@@ -90,6 +90,7 @@ openModalBtn.addEventListener('click', () => {
   senderDropdown.classList.remove('active');
   setInputsReadOnly(false);
   formModal.classList.add('active');
+  setTimeout(() => recipientInput.focus(), 350);
 });
 
 // Closes modal handlers
@@ -111,8 +112,34 @@ function setInputsReadOnly(isReadOnly) {
   messageInput.readOnly = isReadOnly;
 }
 
+const skelEmojis = ['💌', '🎉', '💝', '🥳', '💫', '🎊', '💕', '✨'];
+
+function showSkeletons(count = 6) {
+  cardsGrid.innerHTML = Array.from({ length: count }, (_, i) => `
+    <div class="skeleton-card">
+      <div class="skel-tape"></div>
+      <div class="skel-row">
+        <div class="skel-label"></div>
+        <div class="skel-line skel-name"></div>
+      </div>
+      <div class="skel-heart-zone">
+        <span class="skel-emoji">${skelEmojis[i % skelEmojis.length]}</span>
+      </div>
+      <div class="skel-body">
+        <div class="skel-line skel-msg skel-msg--1"></div>
+        <div class="skel-line skel-msg skel-msg--2"></div>
+      </div>
+      <div class="skel-row">
+        <div class="skel-label"></div>
+        <div class="skel-line skel-name skel-name--short"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
 // Fetch and load database greeting cards
 async function loadGreetingCards() {
+  showSkeletons();
   try {
     const response = await fetch(`${API_BASE_URL}/api/cards`);
     allFetchedCards = await response.json();
@@ -125,7 +152,12 @@ async function loadGreetingCards() {
 // Renders layouts with Framer-style staggered transitions
 function renderCards(cardsArray) {
   if (cardsArray.length === 0) {
-    cardsGrid.innerHTML = `<div class="loading-state">No greeting cards found.</div>`;
+    cardsGrid.innerHTML = `
+      <div class="empty-state">
+        <p class="empty-line">Nine years of laughter, late nights &amp; big dreams.</p>
+        <p class="empty-line">This wall is waiting for your words.</p>
+        <p class="empty-line">Write a note, share the love — celebrate us! 🎉</p>
+      </div>`;
     return;
   }
 
@@ -215,7 +247,24 @@ function escapeHTML(str) {
   return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
 }
 
+// Position carousel directly below header, then anchor cards wall below both
+function updateContentOffset() {
+  const header   = document.querySelector('.app-header');
+  const carousel = document.querySelector('.photo-carousel-container');
+  const wall     = document.querySelector('.cards-wall-container');
+  if (!header || !carousel || !wall) return;
+
+  const headerH = header.offsetHeight;
+  carousel.style.top = headerH + 'px';
+
+  // Read carousel height after repositioning
+  const carouselH = carousel.offsetHeight;
+  wall.style.top = (headerH + carouselH) + 'px';
+}
+
 // App bootstrapping sequence
 document.addEventListener('DOMContentLoaded', () => {
+  updateContentOffset();
+  window.addEventListener('resize', updateContentOffset);
   loadGreetingCards();
 });

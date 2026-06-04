@@ -8,23 +8,29 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body { height: 100%; }
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: radial-gradient(120% 90% at 50% 0%, #e8e9f7 0%, #d8daf0 55%, #c8cbe9 100%);
   color: #1c1c28;
-  min-height: 100vh;
-  padding-bottom: 120px;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 /* Header Layout */
-.app-header { 
-  display: flex; 
-  flex-direction: row; 
-  align-items: center; 
-  justify-content: center; 
-  padding: 20px 20px 10px 20px; 
-  gap: 14px; 
+.app-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 20px 10px 20px;
+  gap: 14px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: radial-gradient(120% 90% at 50% 0%, #e8e9f7 0%, #d8daf0 55%, #c8cbe9 100%);
 }
 
 /* Hyper-Modern Bold Typography Layout */
@@ -45,14 +51,19 @@ body {
 }
 
 /* 1. Add overflow: hidden so the giant track doesn't break your page width */
-.photo-carousel-container { 
-  padding: 20px 0; 
-  background: rgba(255, 255, 255, 0.4); 
-  margin-bottom: 30px; 
-  border-top: 1px solid rgba(24,13,173,0.1); 
-  border-bottom: 1px solid rgba(24,13,173,0.1); 
-  overflow: hidden; 
+.photo-carousel-container {
+  padding: 20px 0;
+  background: rgba(216, 218, 240, 0.97);
+  border-top: 1px solid rgba(24,13,173,0.1);
+  border-bottom: 1px solid rgba(24,13,173,0.1);
+  overflow: hidden;
   width: 100%;
+  position: fixed;
+  top: 78px;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  backdrop-filter: blur(6px);
 }
 
 /* 2. Force the track to be as wide as all 46 photos combined */
@@ -81,12 +92,150 @@ body {
 
 /* Search Customization */
 .search-wrapper { max-width: 500px; margin: 0 auto 40px auto; }
+
 #searchBar { width: 100%; padding: 14px 24px; font-size: 1rem; font-family: "Alata", sans-serif; border: 2px solid #d8daf0; border-radius: 50px; outline: none; transition: 0.3s; }
 #searchBar:focus { border-color: var(--cover); box-shadow: 0 8px 25px rgba(24, 13, 173, 0.15); }
 
-/* Wall Grid Component */
-.cards-wall-container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+/* Wall Grid Component — fixed panel, top set by JS, fills to bottom */
+.cards-wall-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* top is set dynamically by JS */
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(120% 90% at 50% 0%, #e8e9f7 0%, #d8daf0 55%, #c8cbe9 100%);
+  z-index: 10;
+}
+
+/* Search bar pinned at top of panel — never scrolls */
+.search-wrapper {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px 24px 12px;
+}
+
+/* Only the grid scrolls */
+.cards-grid {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 25px;
+  padding: 0 24px 120px;
+}
+
+/* ── Skeleton loader cards ── */
+@keyframes celebShimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+@keyframes skelPulse {
+  0%, 100% { transform: scale(1);   opacity: .85; }
+  50%       { transform: scale(1.18); opacity: 1; }
+}
+
+.skeleton-card {
+  position: relative;
+  border-radius: 2px 6px 6px 2px;
+  background: linear-gradient(135deg, #fff8fd 0%, #fff 60%, #f8f4ff 100%);
+  box-shadow: 0 5px 18px rgba(24,13,120,.05), inset 0 0 0 1px rgba(200,100,180,.08);
+  padding: 20px 20px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 190px;
+  max-height: 240px;
+  overflow: hidden;
+}
+
+.skel-tape {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 55px; height: 14px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, #fbd3f0 25%, #fde8ff 50%, #fbd3f0 75%);
+  background-size: 800px 100%;
+  animation: celebShimmer 1.4s infinite linear;
+}
+
+.skel-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.skel-heart-zone {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.skel-emoji {
+  font-size: 2.2rem;
+  animation: skelPulse 1.6s ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px rgba(200, 80, 160, 0.25));
+}
+
+.skel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.skel-label {
+  width: 30px; height: 9px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e8c8f8 25%, #ffd0ee 50%, #e8c8f8 75%);
+  background-size: 800px 100%;
+  animation: celebShimmer 1.4s infinite linear;
+  flex-shrink: 0;
+}
+
+.skel-line {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f4dcff 25%, #ffe4f5 50%, #f4dcff 75%);
+  background-size: 800px 100%;
+  animation: celebShimmer 1.4s infinite linear;
+}
+
+.skel-name        { height: 20px; width: 55%; }
+.skel-name--short { height: 20px; width: 40%; }
+.skel-msg         { height: 13px; }
+.skel-msg--1      { width: 88%; animation-delay: 0.1s; }
+.skel-msg--2      { width: 70%; animation-delay: 0.2s; }
+
+/* Empty state */
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 60px 24px;
+  text-align: center;
+}
+.empty-line {
+  font-family: 'Caveat', cursive;
+  font-size: 1.6rem;
+  color: var(--cover);
+  line-height: 1.4;
+}
+.glitter {
+  color: #C9960C;
+  text-shadow: 0 0 8px rgba(255, 200, 0, 0.7), 0 0 16px rgba(255, 180, 0, 0.4);
+  font-size: 1.3em;
+}
 
 /* FRAMER MOTION EMULATION: Staggered Fade + Spring scale on mount */
 @keyframes framerMotionEntrance {
@@ -102,16 +251,17 @@ body {
 
 /* Artistic, Organic Board Note Cards */
 .grid-paper-card {
-  position: relative; 
+  position: relative;
   border-radius: 2px 6px 6px 2px;
   box-shadow: 0 5px 18px rgba(24,13,120,.04), inset 0 0 0 1px rgba(24,13,120,.03);
-  padding: 24px 20px 18px 20px; 
+  padding: 24px 20px 18px 20px;
   display: flex;
   flex-direction: column;
   min-height: 190px;
   max-height: 240px;
+  overflow: hidden;
   cursor: pointer;
-  opacity: 0; 
+  opacity: 0;
   animation: framerMotionEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
 }
@@ -128,7 +278,7 @@ body {
 .grid-paper-card::before {
   content: '';
   position: absolute;
-  top: -8px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%) rotate(-2deg);
   width: 55px;
@@ -147,23 +297,21 @@ body {
 }
 
 /* Dynamic Text Fields Inside Main Grid Board */
-.grid-paper-card .tf-row { gap: 8px; }
+.grid-paper-card .tf-row { gap: 8px; flex-shrink: 0; display: flex; align-items: baseline; }
 .grid-paper-card .tf-label { width: 32px; font-size: 9.5px; }
 .grid-paper-card .tf-val.hand { font-size: 20px; min-height: 20px; }
-.grid-paper-card .message.hand { 
-  font-size: 18px; 
-  line-height: 1.35; 
-  margin-top: 10px; 
-  margin-bottom: 10px; 
+.grid-paper-card .message.hand {
+  flex: 1;
+  min-height: 0;
+  font-size: 18px;
+  line-height: 1.35;
+  margin: 8px 0;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
 }
 
 /* Perfect Modal Centering Framework */
 .action-footer { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 100; }
-.btn-trigger-modal { background: var(--cover); color: #fff; border: none; padding: 16px 36px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 25px rgba(24, 13, 173, 0.3); font-family: "Alata", sans-serif; font-weight: bold; transition: transform 0.2s ease; }
+.btn-trigger-modal { background: var(--cover); color: #fff; border: none; padding: 16px 36px; font-size: clamp(0.85rem, 2.2vw, 1.1rem); border-radius: 50px; cursor: pointer; box-shadow: 0 10px 25px rgba(24, 13, 173, 0.3); font-family: "Alata", sans-serif; font-weight: bold; transition: transform 0.2s ease; }
 .btn-trigger-modal:hover { transform: scale(1.04); }
 
 .modal-overlay { position: fixed; inset: 0; background: rgba(28,28,40,0.65); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1000; }
@@ -270,7 +418,152 @@ body {
   padding-left: 20px; /* Cute slide-in effect on hover */
 }
 
+/* Mobile card header — hidden on desktop, shown as branding inside the bottom sheet */
+.mobile-card-header { display: none; }
+
 /* Custom Sleek Scrollbar for the list */
 .custom-dropdown::-webkit-scrollbar { width: 5px; }
 .custom-dropdown::-webkit-scrollbar-track { background: transparent; }
 .custom-dropdown::-webkit-scrollbar-thumb { background: rgba(24, 13, 173, 0.2); border-radius: 10px; }
+
+/* ==============================================
+   RESPONSIVE — Tablet (≤ 1024px)
+   ============================================== */
+@media (max-width: 1024px) {
+  .anniversary-title { font-size: 2.2rem; }
+  .company-logo { height: 42px; }
+  .photo-track img { height: 150px; }
+  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+}
+
+/* ==============================================
+   RESPONSIVE — Mobile (≤ 767px)
+   ============================================== */
+@media (max-width: 767px) {
+
+  /* Header */
+  .app-header {
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px 16px 10px 16px;
+  }
+  .anniversary-title { font-size: 1.75rem; text-align: center; }
+  .company-logo { height: 36px; }
+
+  /* Photo strip */
+  .photo-carousel-container { padding: 14px 0; }
+  .photo-track img { height: 180px; margin: 0 8px; border-radius: 8px; }
+
+  /* Search */
+  .search-wrapper { padding: 12px 14px 8px; }
+  #searchBar { padding: 12px 18px; font-size: 0.95rem; }
+
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 0 14px 100px;
+  }
+  .grid-paper-card {
+    min-height: 150px;
+    max-height: 200px;
+    padding: 18px 12px 14px 12px;
+  }
+  .grid-paper-card .tf-val.hand { font-size: 16px; }
+  .grid-paper-card .message.hand { font-size: 13px; line-height: 1.3; }
+
+  /* Floating button — full width on mobile */
+  .action-footer {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    padding: 12px 16px;
+    background: linear-gradient(to top, rgba(216, 218, 240, 0.98) 70%, transparent);
+  }
+  .btn-trigger-modal {
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 14px;
+    text-align: center;
+  }
+
+  /* ── Modal: bottom-sheet on mobile ── */
+  .modal-overlay { align-items: flex-end; }
+
+  /* Kill the desktop scale transform */
+  .modal-overlay.active .card-composer-stage {
+    transform: none !important;
+    width: 100%;
+    height: auto;
+    perspective: none;
+  }
+
+  .spread {
+    width: 100% !important;
+    height: auto !important;
+    transform-style: flat !important;
+    transform: none !important;
+  }
+
+  /* Hide decorative book elements */
+  .spine,
+  .cover { display: none !important; }
+
+  /* Right page becomes the full-width bottom sheet */
+  .page.right {
+    position: relative !important;
+    right: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 75vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    box-shadow: 0 -8px 40px rgba(24, 13, 120, 0.18) !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .page-inset {
+    position: relative !important;
+    inset: auto !important;
+    padding: 32px 24px 28px 24px !important;
+    flex: 1 !important;
+    height: auto !important;
+  }
+
+  /* 9 years branding header inside the bottom sheet */
+  .mobile-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(24, 13, 173, 0.1);
+  }
+  .mobile-card-header .back-mark { font-size: 72px; line-height: 1; }
+  .mobile-card-header .back-sub { font-size: 11px; letter-spacing: 0.32em; margin-top: 2px; }
+  .mobile-card-header .back-rule { width: 40px; height: 2px; background: var(--cover); opacity: 0.5; margin: 12px 0 10px; }
+  .mobile-card-header .back-note { font-size: 15px; line-height: 1.5; color: rgba(28, 28, 40, 0.6); }
+
+  /* Form font sizes inside the bottom sheet */
+  .tf-val.hand { font-size: 24px; }
+  .message.hand { font-size: 22px; min-height: 140px; }
+
+  /* Push buttons to the bottom of the sheet */
+  #greetingForm { flex: 1; }
+  .modal-actions-custom { margin-top: auto !important; padding-top: 16px; }
+}
+
+/* ==============================================
+   RESPONSIVE — Small mobile (≤ 420px)
+   ============================================== */
+@media (max-width: 420px) {
+  .anniversary-title { font-size: 1.45rem; }
+  .company-logo { height: 30px; }
+  .photo-track img { height: 150px; }
+  .cards-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid-paper-card { min-height: 130px; max-height: 185px; }
+  .page-inset { padding: 24px 18px 20px 18px !important; }
+  .tf-val.hand { font-size: 20px; }
+  .message.hand { font-size: 19px; }
+}

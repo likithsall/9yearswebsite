@@ -62,7 +62,7 @@ app.get('/api/cards', async (req, res) => {
     const cards = await GreetingCard.find().sort({ date: -1 });
     res.status(200).json(cards);
   } catch (error) {
-    console.error('GET /api/cards failed:', error.message);
+    console.error('GET /api/cards failed:', error.message, error.stack);
     res.status(500).json({ error: 'Failed to retrieve greeting cards' });
   }
 });
@@ -83,7 +83,7 @@ app.post('/api/cards', async (req, res) => {
     
     res.status(201).json(newCard);
   } catch (error) {
-    console.error('POST /api/cards failed:', error.message);
+    console.error('POST /api/cards failed:', error.message, error.stack);
     res.status(500).json({ error: 'Failed to save your card to database' });
   }
 });

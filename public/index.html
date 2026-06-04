@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edwisely · Happy 9 Years</title>
   
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=Alata&family=Belleza&family=Caveat:wght@400..700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
@@ -18,7 +20,6 @@
 
   <section class="photo-carousel-container">
     <div class="photo-track" id="photoTrack">
-      <!-- 📸 SET 1: Your 23 Photos -->
       <img src="assets/photo1.jpg" alt="Edwisely Memory">
       <img src="assets/photo2.jpg" alt="Edwisely Memory">
       <img src="assets/photo3.jpg" alt="Edwisely Memory">
@@ -43,7 +44,6 @@
       <img src="assets/photo22.jpg" alt="Edwisely Memory">
       <img src="assets/photo23.jpg" alt="Edwisely Memory">
 
-      <!-- 🔄 SET 2: The Seamless Loop Buffer (Exact same 23 photos) -->
       <img src="assets/photo1.jpg" alt="Edwisely Memory">
       <img src="assets/photo2.jpg" alt="Edwisely Memory">
       <img src="assets/photo3.jpg" alt="Edwisely Memory">
@@ -92,16 +92,18 @@
         <div class="page right">
           <div class="page-inset">
             <form id="greetingForm" style="display: flex; flex-direction: column; height: 100%;">
-              <div class="tf-row tf-top">
+              <div class="tf-row tf-top" style="position: relative;">
                 <span class="tf-label">To</span>
                 <input type="text" id="recipientName" class="tf-val hand field-input" autocomplete="off" required>
+                <ul id="recipientDropdown" class="custom-dropdown"></ul>
               </div>
 
               <textarea id="message" class="field message hand field-input" placeholder="Write your thanks here…" required></textarea>
 
-              <div class="tf-row tf-bottom">
+              <div class="tf-row tf-bottom" style="position: relative;">
                 <span class="tf-label">From</span>
                 <input type="text" id="senderName" class="tf-val hand field-input" autocomplete="off" required>
+                <ul id="senderDropdown" class="custom-dropdown"></ul>
               </div>
 
               <div class="modal-actions-custom write-only">

@@ -230,3 +230,47 @@ body {
 
 [data-mode="write"] .view-only { display: none !important; }
 [data-mode="view"] .write-only { display: none !important; }
+
+/* 🌟 Custom Dropdown Beautification */
+.custom-dropdown {
+  position: absolute;
+  top: 100%; /* Pushes it right below the input line */
+  left: 46px; /* Aligns perfectly with the input text, skipping the label */
+  width: calc(100% - 46px);
+  max-height: 160px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(24, 13, 173, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(24, 13, 173, 0.12);
+  z-index: 1000;
+  list-style: none;
+  margin-top: 4px;
+  padding: 6px 0;
+  display: none; /* Hidden by default */
+}
+
+.custom-dropdown.active {
+  display: block;
+}
+
+.custom-dropdown li {
+  padding: 8px 16px;
+  font-family: "Alata", sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+}
+
+.custom-dropdown li:hover {
+  background: rgba(24, 13, 173, 0.08);
+  color: var(--cover);
+  padding-left: 20px; /* Cute slide-in effect on hover */
+}
+
+/* Custom Sleek Scrollbar for the list */
+.custom-dropdown::-webkit-scrollbar { width: 5px; }
+.custom-dropdown::-webkit-scrollbar-track { background: transparent; }
+.custom-dropdown::-webkit-scrollbar-thumb { background: rgba(24, 13, 173, 0.2); border-radius: 10px; }

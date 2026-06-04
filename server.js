@@ -6,16 +6,36 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const isVercel = process.env.VERCEL === '1';
+
+let mongoConnectionPromise;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MongoDB Connection Setup
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ Connected successfully to MongoDB'))
-  .catch(err => console.error('❌ MongoDB database connection error:', err));
+// Reuse MongoDB connection across invocations in serverless runtimes.
+function connectToMongo() {
+  if (!mongoConnectionPromise) {
+    mongoConnectionPromise = mongoose.connect(process.env.MONGO_URI)
+      .then(() => {
+        console.log('Connected successfully to MongoDB');
+        return mongoose.connection;
+      })
+      .catch((err) => {
+        mongoConnectionPromise = null;
+        console.error('MongoDB database connection error:', err);
+        throw err;
+      });
+  }
+
+  return mongoConnectionPromise;
+}
+
+connectToMongo().catch(() => {
+  // Prevent startup crash so API routes can return proper errors if DB is unavailable.
+});
 
 // 🔄 UPDATED: Greeting Card Schema Definition
 const cardSchema = new mongoose.Schema({
@@ -63,6 +83,10 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running dynamically on http://localhost:${PORT}`);
-});
+if (!isVercel) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

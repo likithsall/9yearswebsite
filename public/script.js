@@ -93,11 +93,32 @@ openModalBtn.addEventListener('click', () => {
   setTimeout(() => recipientInput.focus(), 350);
 });
 
+const writeNote = 'Write a few honest words, and pin this to the board.';
+const viewNotes = [
+  'Thank you for these beautiful words — they mean the world. 💙',
+  'What a heartfelt note. Every word a treasure, pinned here forever. 💙',
+  'Your kindness shines through every letter. Thank you for this. 💙',
+  'Nine years, countless memories — and notes like yours make it all worth it. 💙',
+  'This message just made someone\'s day a little brighter. Thank you. 💙',
+  'Words like these are the ones we\'ll carry long after the party ends. 💙',
+  'A note this warm deserves to stay on this wall forever. 💙',
+  'Nine years of trust, laughter and love — thank you for adding to it. 💙',
+  'The most beautiful gift you can give is honest words. Thank you. 💙',
+  'Every anniversary is sweeter with hearts like yours around. 💙',
+  'This note is now part of our story. Thank you for writing it. 💙',
+  'Your words just made nine years feel like the best decision ever. 💙',
+];
+
+function setBackNote(text) {
+  document.querySelectorAll('.back-note').forEach(el => el.textContent = text);
+}
+
 // Closes modal handlers
 const hideModal = () => {
   formModal.classList.remove('active');
   recipientDropdown.classList.remove('active');
   senderDropdown.classList.remove('active');
+  setBackNote(writeNote);
 };
 closeModalBtn.addEventListener('click', hideModal);
 viewCloseModalBtn.addEventListener('click', hideModal);
@@ -190,6 +211,7 @@ function renderCards(cardsArray) {
       messageInput.value = card.message;
       senderInput.value = card.senderName;
       setInputsReadOnly(true);
+      setBackNote(viewNotes[Math.floor(Math.random() * viewNotes.length)]);
       formModal.classList.add('active');
     });
 

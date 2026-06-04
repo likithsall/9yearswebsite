@@ -17,8 +17,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Reuse MongoDB connection across invocations in serverless runtimes.
 function connectToMongo() {
+  if (!process.env.MONGO_URI) {
+    return Promise.reject(new Error('MONGO_URI environment variable is not set'));
+  }
+
   if (!mongoConnectionPromise) {
-    mongoConnectionPromise = mongoose.connect(process.env.MONGO_URI)
+    mongoConnectionPromise = mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 10000
+    })
       .then(() => {
         console.log('Connected successfully to MongoDB');
         return mongoose.connection;
@@ -52,9 +58,11 @@ const GreetingCard = mongoose.model('GreetingCard', cardSchema);
 // 1. Get all saved anniversary cards
 app.get('/api/cards', async (req, res) => {
   try {
+    await connectToMongo();
     const cards = await GreetingCard.find().sort({ date: -1 });
     res.status(200).json(cards);
   } catch (error) {
+    console.error('GET /api/cards failed:', error.message);
     res.status(500).json({ error: 'Failed to retrieve greeting cards' });
   }
 });
@@ -62,6 +70,7 @@ app.get('/api/cards', async (req, res) => {
 // 2. 🔄 UPDATED: Save a new anniversary card
 app.post('/api/cards', async (req, res) => {
   try {
+    await connectToMongo();
     const { recipientName, senderName, message } = req.body;
     
     // Validate that all three required fields are filled out
@@ -74,6 +83,7 @@ app.post('/api/cards', async (req, res) => {
     
     res.status(201).json(newCard);
   } catch (error) {
+    console.error('POST /api/cards failed:', error.message);
     res.status(500).json({ error: 'Failed to save your card to database' });
   }
 });
